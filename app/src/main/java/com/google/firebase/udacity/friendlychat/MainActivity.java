@@ -204,22 +204,22 @@ public class MainActivity extends AppCompatActivity {
             } else if (resultCode == RESULT_CANCELED){
                 Toast.makeText(this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
                 finish();
-            } else if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK){
-                Uri selectedImageUri = data.getData();
-                StorageReference photoRef =
-                        mStorageReference.child(selectedImageUri.getLastPathSegment());
-
-                photoRef.putFile(selectedImageUri).addOnSuccessListener(this,
-                        new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                FriendlyMessage friendlyMessage =
-                                        new FriendlyMessage(null, mUsername, downloadUrl.toString());
-                                mMessagesDatabaseReference.push().setValue(friendlyMessage);
-                            }
-                        });
             }
+        } else if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK){
+            Uri selectedImageUri = data.getData();
+            StorageReference photoRef =
+                    mStorageReference.child(selectedImageUri.getLastPathSegment());
+
+            photoRef.putFile(selectedImageUri).addOnSuccessListener(this,
+                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            FriendlyMessage friendlyMessage =
+                                    new FriendlyMessage(null, mUsername, downloadUrl.toString());
+                            mMessagesDatabaseReference.push().setValue(friendlyMessage);
+                        }
+                    });
         }
     }
 
